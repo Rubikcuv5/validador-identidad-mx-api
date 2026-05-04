@@ -160,3 +160,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+
+# Coverage
+.coverage
+htmlcov/
+
+# SQLite
+*.db
+
+# venv
+.venv/
