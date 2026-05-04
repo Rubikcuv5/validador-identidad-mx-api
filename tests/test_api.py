@@ -14,7 +14,7 @@ from app.main import app  # noqa: E402
 
 client = TestClient(app)
 
-VALID_CURP = "BADD110313HCMLNS09"
+VALID_CURP = "BADD110313HCMLNS06"
 
 
 @pytest.fixture(autouse=True)

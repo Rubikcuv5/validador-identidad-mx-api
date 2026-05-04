@@ -13,12 +13,14 @@ from app.validators import validate_curp, validate_rfc  # noqa: E402
 
 client = TestClient(app)
 
+VALID_CURP = "BADD110313HCMLNS06"
+
 
 # --- Endpoints ---
 
 
 def test_endpoint_curp():
-    r = client.post("/validate", json={"document": "BADD110313HCMLNS09", "doc_type": "CURP"})
+    r = client.post("/validate", json={"document": VALID_CURP, "doc_type": "CURP"})
     assert r.status_code == 200
     assert r.json()["valid"] is True
 
@@ -33,9 +35,14 @@ def test_endpoint_rfc():
 
 
 def test_curp_valido():
-    result = validate_curp("BADD110313HCMLNS09")
+    result = validate_curp(VALID_CURP)
     assert result["valid"] is True
     assert result["type"] == "CURP"
+
+
+def test_curp_real_valido_emmanuel_cruz():
+    result = validate_curp("CULE011101HOCRPMA3")
+    assert result["valid"] is True
 
 
 def test_curp_formato_invalido():
@@ -45,6 +52,7 @@ def test_curp_formato_invalido():
 
 
 def test_curp_digito_verificador_incorrecto():
+    # BADD110313HCMLNS06 es válido; cambiamos el último dígito
     result = validate_curp("BADD110313HCMLNS07")
     assert result["valid"] is False
     assert "verificador" in result["reason"]

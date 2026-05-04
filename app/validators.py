@@ -4,15 +4,14 @@ from datetime import date
 # CURP: 4 letras, 6 dígitos fecha, sexo, estado, 3 consonantes internas, homoclave, dígito verificador
 _CURP_RE = re.compile(r"^[A-Z]{4}\d{6}[HM][A-Z]{2}[B-DF-HJ-NP-TV-Z]{3}[A-Z0-9]\d$")
 
-# Tabla de caracteres para dígito verificador CURP
-_CURP_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# Tabla oficial DOF: incluye Ñ en posición 24
+_CURP_CHARS = "0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
 
 
 def _curp_check_digit(curp17: str) -> str:
-    """Calcula el dígito verificador de los primeros 17 caracteres."""
+    """Calcula el dígito verificador de los primeros 17 caracteres (tabla oficial con Ñ)."""
     total = sum((18 - i) * _CURP_CHARS.index(c) for i, c in enumerate(curp17))
-    remainder = total % 10
-    return str(0 if remainder == 0 else 10 - remainder)
+    return str((10 - (total % 10)) % 10)
 
 
 def validate_curp(curp: str) -> dict:
